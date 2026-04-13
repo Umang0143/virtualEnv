@@ -4,8 +4,16 @@
         "age": "31"
     },
     {
-        "name": "umang",
+        "id": "1",
+        "name": "Umang",
         "age": "31",
-        "city": "Mandi-kutch"
+        "city": "Mandvi-kutch"
+    },
+    {
+        "name": "umang",
+        "email": "admin@gmail.com",
+        "password": "1234",
+        "contact": 1234567890,
+        "address": "patelvash,durgapur mandvi-kutch"
     }
 ]
