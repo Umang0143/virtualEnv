@@ -92,6 +92,7 @@ class signup(BaseModel):
     password:str
     contact:int
     address:str
+    fileUrl:str
 
 @app.post("/signup")
 # def signup(data: signup):
