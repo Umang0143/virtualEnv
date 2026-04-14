@@ -10,10 +10,11 @@
         "city": "Mandvi-kutch"
     },
     {
-        "name": "umang",
+        "name": "Umang",
         "email": "admin@gmail.com",
         "password": "1234",
-        "contact": 1234567890,
-        "address": "patelvash,durgapur mandvi-kutch"
+        "contact": null,
+        "address": null,
+        "fileUrl": "https://res.cloudinary.com/dhc9vy4v2/image/upload/v1776151811/wc4fj1lbqnegchmw0dwt.jpg"
     }
 ]

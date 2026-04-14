@@ -1,84 +1,123 @@
 import { useState } from "react";
-
-function SignUp() {
-  const [formData, setFormData] = useState({
+import API from "./services/api";
+import { useNavigate } from "react-router-dom";
+ 
+function Signup() {
+  const navigate = useNavigate();
+ 
+  const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
-    image: null
+    fileUrl: "",
   });
-
+ 
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState("");
+ 
   const handleChange = (e) => {
-    if (e.target.name === "image") {
-      setFormData({ ...formData, image: e.target.files[0] });
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+ 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile));
+  };
+ console.log("file",file)
+  const uploadImage = async () => {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "sumang_upload");
+ 
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dhc9vy4v2/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+ 
+    const result = await res.json();
+    return result.secure_url;
+  };
+ 
+  const handleSignup = async (e) => {
+    e.preventDefault();
+ 
+    try {
+      let imageUrl = "";
+ 
+      if (file) {
+        imageUrl = await uploadImage();
+      }
+ 
+      await API.post("/signup", {
+        ...form,
+        fileUrl: imageUrl,
+      });
+ 
+      alert("Signup Successful ✅");
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      alert("Signup Failed ");
     }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
+ 
   return (
     <div className="container mt-5">
-      <div className="card p-4 shadow">
-        <h2 className="text-center mb-4">Signup</h2>
-
-        <form onSubmit={handleSubmit}>
-          
-          <div className="mb-3">
-            <label>Name</label>
-            <input 
-              type="text" 
-              name="name"
-              className="form-control"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label>Email</label>
-            <input 
-              type="email" 
-              name="email"
-              className="form-control"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label>Password</label>
-            <input 
-              type="password" 
-              name="password"
-              className="form-control"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label>Upload Image</label>
-            <input 
-              type="file" 
-              name="image"
-              className="form-control"
-              onChange={handleChange}
-            />
-          </div>
-
-          <button className="btn btn-primary w-100">
-            Signup
-          </button>
-
-        </form>
-      </div>
+      <form onSubmit={handleSignup} className="col-md-4 mx-auto card p-4 shadow">
+ 
+        <h3 className="text-center mb-3">Signup</h3>
+ 
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          className="form-control mb-2"
+          onChange={handleChange}
+        />
+ 
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          className="form-control mb-2"
+          onChange={handleChange}
+        />
+ 
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="form-control mb-2"
+          onChange={handleChange}
+        />
+ 
+        <input
+          type="file"
+          className="form-control mb-2"
+          onChange={handleFileChange}
+        />
+ 
+        {preview && (
+          <img
+            src={preview}
+            alt="preview"
+            className="img-fluid mb-2"
+            style={{ height: "150px", objectFit: "cover" }}
+          />
+        )}
+ 
+        <button className="btn btn-success w-100">Signup</button>
+      </form>
     </div>
   );
 }
-
-export default SignUp;
+ 
+export default Signup;
+ 

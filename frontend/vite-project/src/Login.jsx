@@ -1,57 +1,83 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { Col, Container } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import API from "./services/api";
 
-function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function Login() {
+  const navigate = useNavigate();
 
-  const login = async () => {
-    const response = await fetch("http://127.0.0.1:8000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const data = await response.json();
-    alert(data.message);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await API.post("/login", form);
+
+      alert(res.data.message || "Login Successful");
+
+      // 👉 success redirect
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      alert("Login Failed");
+    }
   };
 
   return (
-    <div className="container">
-      <div
-        className="row justify-content-center"
-        style={{ marginTop: "100px" }}
-      >
-        <div className="col-md-4">
-          <div className="card shadow p-4">
-            <h3 className="text-center mb-4">Login</h3>
+    <Container className="mt-5">
+      <Col lg={4} className="mx-auto">
+        <div className="card p-4 shadow">
+          <h3 className="text-center mb-3">Login</h3>
 
-            <input
-              type="text"
-              className="form-control mb-3"
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
+          <form onSubmit={handleLogin}>
+            <div className="mb-3">
+              <label className="form-label">Email address</label>
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Enter email"
+                onChange={handleChange}
+              />
+            </div>
 
-            <input
-              type="password"
-              className="form-control mb-3"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                placeholder="Password"
+                onChange={handleChange}
+              />
+            </div>
 
-            <button className="btn btn-primary w-100" onClick={login}>
-              Login
+            <div className="form-check mb-3">
+              <input type="checkbox" className="form-check-input" />
+              <label className="form-check-label">Remember me</label>
+            </div>
+
+            <button type="submit" className="btn btn-primary w-100 mb-2">
+              Sign In
             </button>
-          </div>
+
+            <Link to="/signup" className="btn btn-secondary w-100">
+              Signup
+            </Link>
+          </form>
         </div>
-      </div>
-    </div>
+      </Col>
+    </Container>
   );
 }
-
-export default Login;

@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from datetime import datetime
 from pydantic import BaseModel , EmailStr
 from fastapi import HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from typing import Optional
+
 import json
 import os
 
@@ -37,23 +40,22 @@ def post(data: dict):
 
 
 
+origins = [
+    "http://localhost:5173",
+]
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class login(BaseModel):
     email:str
     password:str
 
-
-# @app.post("/login")
-# def login(data: login):
-#     users = check()
-
-#     for user in users:
-#         if user.get("email") == data.email and user.get("password") == data.password:
-#             return {"message": "Login successful"}
-
-#     return {"message": "Invalid credentials"}
 def write_log(message: str):
     with open("logs.txt", "a") as f:
         time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -90,24 +92,7 @@ class signup(BaseModel):
     name:str
     email:EmailStr
     password:str
-    contact:int
-    address:str
-    fileUrl:str
-
-@app.post("/signup")
-# def signup(data: signup):
-#     users = check()
-
-#     data_dict = data.model_dump()
-
-#     for user in users:
-#         if user.get("email") == data_dict.get("email"):
-#             return {"message": "User already exists"}
-
-#     users.append(data_dict)
-#     save(users)
-
-#     return {"message": "Signup successful"}
+    fileUrl:Optional[str]=None
 
 @app.post("/signup")
 def signup(data: signup):

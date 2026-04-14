@@ -12,3 +12,27 @@
 2026-04-13 17:21:24 - Signup failed - user already exists: admin@gmail.com
 2026-04-13 17:21:24 - HTTPException - User already exists
 2026-04-13 17:22:09 - Signup success - admin@gmail.com
+2026-04-14 11:51:40 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 11:51:40 - HTTPException - User already exists
+2026-04-14 12:26:09 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:26:09 - HTTPException - User already exists
+2026-04-14 12:26:47 - Signup success - admin@gmail.com
+2026-04-14 12:31:41 - Signup success - admin@gmail.com
+2026-04-14 12:35:15 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:35:15 - HTTPException - User already exists
+2026-04-14 12:42:05 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:42:05 - HTTPException - User already exists
+2026-04-14 12:43:07 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:43:07 - HTTPException - User already exists
+2026-04-14 12:43:53 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:43:53 - HTTPException - User already exists
+2026-04-14 12:44:57 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:44:57 - HTTPException - User already exists
+2026-04-14 12:45:42 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:45:42 - HTTPException - User already exists
+2026-04-14 12:55:33 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:55:33 - HTTPException - User already exists
+2026-04-14 12:57:45 - Signup failed - user already exists: admin@gmail.com
+2026-04-14 12:57:45 - HTTPException - User already exists
+2026-04-14 12:58:30 - Signup success - admin@gmail.com
+2026-04-14 12:59:59 - Signup success - admin@gmail.com

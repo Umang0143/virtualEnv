@@ -1,13 +1,8 @@
-import Login from "./login";
-import SignUp from "./signUp";
+import { RouterProvider } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <>
-      <Login />
-      <SignUp />
-    </>
-  );
+  return <RouterProvider router={AppRoutes} />;
 }
 
 export default App;
