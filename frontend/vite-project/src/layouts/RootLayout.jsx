@@ -1,9 +1,8 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 function RootLayout() {
   return (
     <>
-      <h1>My App</h1>
       <Outlet />
     </>
   );

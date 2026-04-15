@@ -36,3 +36,18 @@
 2026-04-14 12:57:45 - HTTPException - User already exists
 2026-04-14 12:58:30 - Signup success - admin@gmail.com
 2026-04-14 12:59:59 - Signup success - admin@gmail.com
+2026-04-15 12:06:19 - Signup failed - user already exists: admin@gmail.com
+2026-04-15 12:06:19 - HTTPException - User already exists
+2026-04-15 12:06:48 - Signup success - admin@gmail.com
+2026-04-15 12:16:05 - Login failed - invalid credentials for 
+2026-04-15 12:16:05 - HTTPException - Invalid email or password
+2026-04-15 12:16:15 - Login failed - invalid credentials for 
+2026-04-15 12:16:15 - HTTPException - Invalid email or password
+2026-04-15 12:16:24 - Login success - admin@gmail.com
+2026-04-15 12:16:37 - Login failed - invalid credentials for admin@gmail.com
+2026-04-15 12:16:37 - HTTPException - Invalid email or password
+2026-04-15 12:16:43 - Login success - admin@gmail.com
+2026-04-15 12:16:59 - Login failed - invalid credentials for admin@gmail.com
+2026-04-15 12:16:59 - HTTPException - Invalid email or password
+2026-04-15 12:17:03 - Login success - admin@gmail.com
+2026-04-15 15:11:16 - Signup success - admin@gmail.com

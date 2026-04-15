@@ -8,13 +8,5 @@
         "name": "Umang",
         "age": "31",
         "city": "Mandvi-kutch"
-    },
-    {
-        "name": "Umang",
-        "email": "admin@gmail.com",
-        "password": "1234",
-        "contact": null,
-        "address": null,
-        "fileUrl": "https://res.cloudinary.com/dhc9vy4v2/image/upload/v1776151811/wc4fj1lbqnegchmw0dwt.jpg"
     }
 ]

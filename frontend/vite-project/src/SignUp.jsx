@@ -27,7 +27,7 @@ function Signup() {
     setFile(selectedFile);
     setPreview(URL.createObjectURL(selectedFile));
   };
- console.log("file",file)
+
   const uploadImage = async () => {
     const data = new FormData();
     data.append("file", file);
@@ -60,7 +60,7 @@ function Signup() {
         fileUrl: imageUrl,
       });
  
-      alert("Signup Successful ✅");
+      alert("Signup Successful");
       navigate("/");
     } catch (err) {
       console.log(err);
