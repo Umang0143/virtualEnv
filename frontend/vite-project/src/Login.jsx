@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Col, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { signIn } from "aws-amplify/auth"; // ✅ FIX
+import { signIn } from "aws-amplify/auth";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,36 +20,54 @@ export default function Login() {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      // ✅ Cognito login (FIXED)
-      const user = await signIn({
-        username: form.email,
-        password: form.password,
-      });
+  try {
+    // ✅ STEP 1: Login
+    await signIn({
+      username: form.email,
+      password: form.password,
+    });
 
-      console.log(user);
+    // ✅ STEP 2: Token lo
+    const session = await fetchAuthSession();
 
-      // ✅ Save user
-      localStorage.setItem("user", JSON.stringify(user));
+    const idToken = session.tokens.idToken.toString();
+    const accessToken = session.tokens.accessToken.toString();
 
-      alert("Login Successful");
+    console.log("ID TOKEN:", idToken);
+    console.log("ACCESS TOKEN:", accessToken);
+
+    // ✅ Save token
+    localStorage.setItem("token", idToken);
+
+    alert("Login Successful");
+
+    navigate("/dashboard");
+  } catch (err) {
+    console.log(err);
+
+    // ✅ Already login case
+    if (err.name === "UserAlreadyAuthenticatedException") {
+      const session = await fetchAuthSession();
+      const token = session.tokens.idToken.toString();
+
+      localStorage.setItem("token", token);
 
       navigate("/dashboard");
-    } catch (err) {
-      console.log(err);
-
-      if (err.name === "UserNotConfirmedException") {
-        alert("Please verify your email first");
-        navigate("/verify");
-      } else if (err.name === "NotAuthorizedException") {
-        alert("Invalid email or password");
-      } else {
-        alert(err.message || "Login Failed");
-      }
+    } 
+    else if (err.name === "UserNotConfirmedException") {
+      alert("Please verify your email first");
+      navigate("/verify");
+    } 
+    else if (err.name === "NotAuthorizedException") {
+      alert("Invalid email or password");
+    } 
+    else {
+      alert(err.message || "Login Failed");
     }
-  };
+  }
+};
 
   return (
     <Container className="mt-5">

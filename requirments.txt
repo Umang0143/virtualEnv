@@ -2,3 +2,4 @@ FastAPI
 uvicorn
 pydantic[email]
 python-dotenv
+boto3

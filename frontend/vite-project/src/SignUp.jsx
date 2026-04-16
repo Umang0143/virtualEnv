@@ -1,7 +1,8 @@
 import { useState } from "react";
-import API from "../services/api";
+import API from "./services/api";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "aws-amplify/auth"; // ✅ FIX
+import { signUp } from "aws-amplify/auth";
+import { resendSignUpCode } from "aws-amplify/auth";
 
 function Signup() {
   const navigate = useNavigate();
@@ -60,12 +61,12 @@ function Signup() {
     try {
       let imageUrl = "";
 
-      // ✅ 1. Upload image
+      // 1. Upload image
       if (file) {
         imageUrl = await uploadImage();
       }
 
-      // ✅ 2. Cognito Signup (FIXED)
+      // 2. Cognito Signup
       await signUp({
         username: form.email,
         password: form.password,
@@ -77,20 +78,21 @@ function Signup() {
         },
       });
 
-      // ✅ 3. Save in backend
+      // 3. Save in backend
       await API.post("/signup", {
         ...form,
         fileUrl: imageUrl,
       });
 
       alert("Signup Successful! Please verify email");
-      navigate("/");
+      navigate("/verify");
     } catch (err) {
       console.log(err);
       alert(err.message || "Signup Failed");
     }
   };
 
+  
   return (
     <div className="container mt-5">
       <form
@@ -141,7 +143,8 @@ function Signup() {
           />
         )}
 
-        <button className="btn btn-success w-100">Signup</button>
+        <button className="btn btn-success w-100 mt-2">Signup</button>
+        
       </form>
     </div>
   );

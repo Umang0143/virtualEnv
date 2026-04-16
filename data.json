@@ -8,5 +8,23 @@
         "name": "Umang",
         "age": "31",
         "city": "Mandvi-kutch"
+    },
+    {
+        "name": "Umang",
+        "email": "indixpert-2@yopmail.com",
+        "password": "Umang@12345",
+        "fileUrl": "https://res.cloudinary.com/dhc9vy4v2/image/upload/v1776335383/jw9yfhlanrznq8hr1zet.jpg"
+    },
+    {
+        "name": "Umang",
+        "email": "indixpert-4@yopmail.com",
+        "password": "Umang@12345",
+        "fileUrl": "https://res.cloudinary.com/dhc9vy4v2/image/upload/v1776337906/q0mht0ont0mti7tvgckg.jpg"
+    },
+    {
+        "name": "Umang",
+        "email": "indixpert-5@yopmail.com",
+        "password": "Umang@12345",
+        "fileUrl": "https://res.cloudinary.com/dhc9vy4v2/image/upload/v1776338159/hfsvnv5skbibd8hygaxx.jpg"
     }
 ]

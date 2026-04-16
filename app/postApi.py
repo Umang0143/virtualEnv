@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from datetime import datetime
 from pydantic import BaseModel , EmailStr
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
+import jwt
 
 import json
 import os
@@ -87,6 +88,18 @@ def login(data: login):
         write_log(f"Server error - {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+@app.get("/dashboard")
+def dashboard(Authorization: str = Header(None)):
+    if not Authorization:
+        raise HTTPException(status_code=401, detail="No token")
+
+    token = Authorization.split(" ")[1]
+
+    # ⚠️ abhi simple testing (no verify)
+    return {
+        "message": "Welcome to dashboard",
+        "token": token
+    }
 
 class signup(BaseModel):
     name:str
