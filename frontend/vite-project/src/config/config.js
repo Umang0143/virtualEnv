@@ -2,8 +2,10 @@ import { Amplify } from "aws-amplify";
 
 Amplify.configure({
   Auth: {
-    region: process.env.REACT_APP_REGION,
-    userPoolId: process.env.REACT_APP_USER_POOL_ID,
-    userPoolWebClientId: process.env.REACT_APP_CLIENT_ID,
-  }
+    Cognito: {
+      userPoolId: import.meta.env.VITE_USER_POOL_ID,
+      userPoolClientId: import.meta.env.VITE_CLIENT_ID,
+      region: import.meta.env.VITE_REGION,
+    },
+  },
 });

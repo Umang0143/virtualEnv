@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Col, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import API from "./services/api";
+import { signIn } from "aws-amplify/auth"; // ✅ FIX
 
 export default function Login() {
   const navigate = useNavigate();
@@ -22,15 +22,31 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await API.post("/login", form);
+      // ✅ Cognito login (FIXED)
+      const user = await signIn({
+        username: form.email,
+        password: form.password,
+      });
 
-      alert(res.data.message || "Login Successful");
+      console.log(user);
 
-      // 👉 success redirect
-      navigate("/");
+      // ✅ Save user
+      localStorage.setItem("user", JSON.stringify(user));
+
+      alert("Login Successful");
+
+      navigate("/dashboard");
     } catch (err) {
       console.log(err);
-      alert("Login Failed");
+
+      if (err.name === "UserNotConfirmedException") {
+        alert("Please verify your email first");
+        navigate("/verify");
+      } else if (err.name === "NotAuthorizedException") {
+        alert("Invalid email or password");
+      } else {
+        alert(err.message || "Login Failed");
+      }
     }
   };
 
@@ -49,6 +65,7 @@ export default function Login() {
                 className="form-control"
                 placeholder="Enter email"
                 onChange={handleChange}
+                required
               />
             </div>
 
@@ -60,6 +77,7 @@ export default function Login() {
                 className="form-control"
                 placeholder="Password"
                 onChange={handleChange}
+                required
               />
             </div>
 
