@@ -3,9 +3,11 @@ import { Col, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "aws-amplify/auth";
 import { fetchAuthSession } from "aws-amplify/auth";
+import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [loading, setloading] = useState(false);
 
   const [form, setForm] = useState({
     email: "",
@@ -20,54 +22,63 @@ export default function Login() {
   };
 
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    // ✅ STEP 1: Login
-    await signIn({
-      username: form.email,
-      password: form.password,
-    });
+    try {
+      // STEP 1: Login
+      await signIn({
+        username: form.email,
+        password: form.password,
+      });
 
-    // ✅ STEP 2: Token lo
-    const session = await fetchAuthSession();
-
-    const idToken = session.tokens.idToken.toString();
-    const accessToken = session.tokens.accessToken.toString();
-
-    console.log("ID TOKEN:", idToken);
-    console.log("ACCESS TOKEN:", accessToken);
-
-    // ✅ Save token
-    localStorage.setItem("token", idToken);
-
-    alert("Login Successful");
-
-    navigate("/dashboard");
-  } catch (err) {
-    console.log(err);
-
-    // ✅ Already login case
-    if (err.name === "UserAlreadyAuthenticatedException") {
+      // STEP 2: Token lo
       const session = await fetchAuthSession();
-      const token = session.tokens.idToken.toString();
 
-      localStorage.setItem("token", token);
+      const idToken = session.tokens.idToken.toString();
+      const accessToken = session.tokens.accessToken.toString();
 
-      navigate("/dashboard");
-    } 
-    else if (err.name === "UserNotConfirmedException") {
-      alert("Please verify your email first");
-      navigate("/verify");
-    } 
-    else if (err.name === "NotAuthorizedException") {
-      alert("Invalid email or password");
-    } 
-    else {
-      alert(err.message || "Login Failed");
+      console.log("ID TOKEN:", idToken);
+      console.log("ACCESS TOKEN:", accessToken);
+
+      // Save token
+      localStorage.setItem("token", idToken);
+
+      alert("Login Successful");
+
+      const res = await axios.post("http://127.0.0.1:8000/users", {
+        token: idToken
+      }, {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+
+      if (res.status === 200) {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.log(err);
+
+      // if (err.name === "UserAlreadyAuthenticatedException") {
+      //   const session = await fetchAuthSession();
+      //   const token = session.tokens.idToken.toString();
+
+      //   localStorage.setItem("token", token);
+
+      //   navigate("/dashboard");
+    // }
+      if (err.name === "UserNotConfirmedException") {
+        alert("Please verify your email first");
+        navigate("/verify");
+      } else if (err.name === "NotAuthorizedException") {
+        alert("Invalid email or password");
+      } else {
+        alert(err.message || "Login Failed");
+      }
+    }finally {
+      setloading(false);
     }
-  }
-};
+  };
 
   return (
     <Container className="mt-5">

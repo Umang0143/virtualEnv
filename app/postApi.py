@@ -1,3 +1,4 @@
+import email
 from fastapi import FastAPI, Header
 from datetime import datetime
 from pydantic import BaseModel , EmailStr
@@ -5,11 +6,13 @@ from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 import jwt
-
 import json
 import os
 
 app = FastAPI()
+
+SECRET_KEY = "mysecretkey"
+ALGORITHM = "RS256"
 
 @app.get("/home")
 
@@ -39,8 +42,6 @@ def post(data: dict):
     return {"message": "Done",}
 
 
-
-
 origins = [
     "http://localhost:5173",
 ]
@@ -62,6 +63,27 @@ def write_log(message: str):
         time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         f.write(f"{time} - {message}\n")
 
+
+@app.post("/users")
+def users(Authorization: str = Header(None)):
+
+    try:
+        if not Authorization:
+            raise HTTPException(status_code=401, detail="No token")
+        tokan = Authorization.replace("Bearer ", "")
+        payload =jwt.get_unverified_claims(tokan)
+    
+        if not  email:
+            raise HTTPException(status_code=401, detail="Invalid token")
+
+        return {
+            "message": "Welcome to dashboard",
+            "user_email": email,
+            "full_payload": payload
+        }
+
+    except Exception as E:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
 
 @app.post("/login")
 def login(data: login):
@@ -88,18 +110,6 @@ def login(data: login):
         write_log(f"Server error - {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
-@app.get("/dashboard")
-def dashboard(Authorization: str = Header(None)):
-    if not Authorization:
-        raise HTTPException(status_code=401, detail="No token")
-
-    token = Authorization.split(" ")[1]
-
-    # ⚠️ abhi simple testing (no verify)
-    return {
-        "message": "Welcome to dashboard",
-        "token": token
-    }
 
 class signup(BaseModel):
     name:str
